@@ -9,6 +9,19 @@ class Graph(object):
         self.n_label = n_label
         self.sets = self.generate_sets()
 
+    def sons(self):
+        result = []
+        for k in self.sets.keys():
+            r = self.sets.pop(k)
+            
+            if (len(self.sets.values()) is not 0):
+                if (r.issubset(set.union(*self.sets.values()[0:]))):
+                    result.append(r)
+            self.sets[k] = r
+        return result
+        
+
+
     def generate_sets(self):
         g = self.graph
         d =dict()

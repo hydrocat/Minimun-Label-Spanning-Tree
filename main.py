@@ -10,5 +10,5 @@ graph = graph_list[1]
 #print()
 #print(graph.sets)
 #print()
-
-connected(graph_list)
+print graph.sons()
+#connected(graph_list)
