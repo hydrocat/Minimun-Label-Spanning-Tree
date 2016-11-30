@@ -28,11 +28,11 @@ class Graph_importer(object):
         for x in range(10):
             d = dict()
             for vertex in list(enumerate(reversed(list(read_graph(f))),start=1)):
+                if vertex[0] > 50:
+                    import pdb
+                    pdb.set_trace()
                 d[vertex[0]] = dict()
                 for v, label in vertex[1]:
                     d[vertex[0]][v] = label
+            print(len(d))
             yield Graph(d, vertex, labels )
-
-        
-
-        
