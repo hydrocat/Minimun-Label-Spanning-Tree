@@ -46,7 +46,7 @@ class Graph(object):
             #let ver
             vertexes = sets.pop(label)
             #if all vertexes are still accessible
-            if (len(reduce(lambda ac,x: x.union(ac),sets.values())) == self.n_vertex) and (self.connected()):
+            if (len(reduce(lambda ac,x: x.union(ac),sets.values())) == self.n_vertex):# and (self.connected()):
                 #print("Removendo label "+ str(label))
                 #remove the unused edges
                 new_edge_list = [x for x in self.edges if x[1] != label]

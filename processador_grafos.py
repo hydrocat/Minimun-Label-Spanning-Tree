@@ -1,4 +1,5 @@
 from algoritmos import *
+from connected_component import *
 from graph_importer import *
 from heuristicas import *
 from graph import *
@@ -27,7 +28,7 @@ def processa_arquivo(algoritmo,heuristica,arquivo_de_entrada):
     print("Processando " + arquivo_de_entrada)
     graph_importer = Graph_importer(arquivo_de_entrada)
     graph_list = list(graph_importer.graphs())
-    graph_list = filter(lambda x: x.connected(), graph_list)
+    #graph_list = filter(lambda x: x.connected(), graph_list)
 
     print("Processando "+str(len(graph_list))+" grafos validos")
     print("")
@@ -35,21 +36,21 @@ def processa_arquivo(algoritmo,heuristica,arquivo_de_entrada):
     qtd_rotulos = 0.0
     contador_tempo = 0.0
 
+    
 
 
     for graph in graph_list:
-        processar = compose_process(algoritmo,heuristica,graph)
+        #processar = compose_process(algoritmo,heuristica,graph)
+        processar = connectedd
         inicio = time.clock()
-        resultado = processar()
+        resultado = processar(graph)
         fim = time.clock()
         
         tempo = fim - inicio
         contador_tempo += tempo
-        n_rotulos = resultado[2].n_label
-        qtd_rotulos += n_rotulos
-        print("Ticks: %d" % resultado[0] )
-        print("Numero de nos expandidos: %d" %resultado[1])
-        print("Quantidade de Rotulos: " + str(n_rotulos))
+        qtd_rotulos += resultado[0]
+        #n_rotulos = 1
+        print("Quantidade de Rotulos: {}".format(resultado[0]))
         print("Tempo de Execucao: %0.3fs" % tempo)
 
     print("Quantidade media de rotulos por grafo: " +
