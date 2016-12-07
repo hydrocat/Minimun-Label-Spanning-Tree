@@ -60,7 +60,5 @@ def processa_arquivo(algoritmo,heuristica,arquivo_de_entrada):
     
 def processa_diretorio(algoritmo,heuristica,diretorio_de_entrada):
     arquivos = os.listdir(diretorio_de_entrada)
-    print(arquivos)
-    print(diretorio_de_entrada)
     for a in arquivos:
-        processa_arquivo(algoritmo,heuristica,a)
+        processa_arquivo(algoritmo,heuristica,diretorio_de_entrada+a)
