@@ -1,0 +1,16 @@
+from algoritmos import *
+from graph_importer import *
+from heuristicas import *
+from graph import *
+
+
+def processador_grafos(algoritmo,heuristica, arquivo_de_entrada, diretorio_de_entrada):
+    if diretorio_de_entrada == None:
+        processa_arquivo(arquivo_de_entrada)
+
+def processa_arquivo(algoritmo,heuristica,arquivo_de_entrada):
+    graph_importer = Graph_Importer(arquivo_de_entrada)
+    graph_list = list(graph_importer.graphs())
+    
+def processa_diretorio(algoritmo,heuristica,diretorio_de_entrada):
+    pass

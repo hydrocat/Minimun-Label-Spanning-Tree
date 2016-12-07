@@ -12,26 +12,30 @@ Retorna a quantidade de ticks, o parentesco, os locais por onde passou
 e o ultimo no
 """
 
-def busca_estrela( heuristica, tabuleiro ):
+def busca_estrela( heuristica, grafo ):
 	candidatos = PriorityQueue()
-	candidatos.put((heuristica(tabuleiro), tabuleiro), 0)
+	candidatos.put((heuristica(grafo), grafo), 0)
 	pai = {}
-	pai[(heuristica(tabuleiro), tabuleiro)] = [None, 0]
+	pai[(heuristica(grafo), grafo)] = [None, 0]
 	passados = {}
-	passados[(heuristica(tabuleiro), tabuleiro)] = 0
+	passados[(heuristica(grafo), grafo)] = 0
 
 	no_final = None
-	estado_final = (heuristica(Tabuleiro()),Tabuleiro())
+	estado_final = (heuristica(Grafo()),Grafo())
 
 	tick = 0
 	while not candidatos.empty():
+                #pega o melhor candidato
 		candidato = candidatos.get()
-
-		if candidato == estado_final:
-			no_final = candidato
-			break
-
+                
+		#gera os novos candidatos
 		novos_candidatos = [(heuristica(filho), filho) for filho in candidato[1].filhos()]
+
+                #o grafo gerou filhos ?
+                if len(novos_candidatos) == 0:
+                        no_final = candidato
+                        break
+                
 		for novo_candidato in novos_candidatos:
 			novo_custo = pai[candidato][1] + novo_candidato[0]
 			if novo_candidato not in passados:
@@ -48,13 +52,11 @@ def busca_estrela( heuristica, tabuleiro ):
 """
 Retorna a quantidade de iteracoes usadas para terminar
 """
-
-def busca_gulosa( heuristica, tabuleiro ):
-	estado_final = (heuristica(Tabuleiro()),Tabuleiro())
-
+def busca_gulosa( heuristica, grafo ):
+	#estado_final = (heuristica(Grafo()),Grafo())
 	pai = {}
-	pai[(heuristica(tabuleiro), tabuleiro)] = [None, 0]
-	candidatos = [ (heuristica(tabuleiro), tabuleiro) ]
+	pai[(heuristica(grafo), grafo)] = [None, 0]
+	candidatos = [ (heuristica(grafo), grafo) ]
 	encontrou = False
 	passados = []
 	tick = 0
@@ -66,37 +68,37 @@ def busca_gulosa( heuristica, tabuleiro ):
 		tick += 1
 		candidato = candidatos.pop()
 		passados.append(candidato)
-
-		if candidato == estado_final:
-			encontrou = True
-			no_final = candidato
-		else:
-			novos_candidatos = [ (heuristica(filho), filho) for filho in candidato[1].filhos() ]
-			for c in novos_candidatos:
-				if c not in passados and c != candidato:
-					candidatos.append(c)
-					pai[c] = [candidato, pai[candidato][1] + 1]
-
+                novos_candidatos = [ (heuristica(filho), filho) for filho in candidato[1].filhos() ]
+                if len(novos_candidatos) == 0:
+                        no_final = candidato
+                        encontrou = True
+                        break
+                        
+                for c in novos_candidatos:
+                        if c not in passados and c != candidato:
+                                candidatos.append(c)
+                                pai[c] = [candidato, pai[candidato][1] + 1]
+                                
 	return tick, pai, passados, no_final
 
-def busca_largura( tabuleiro ):
+def busca_largura( grafo ):
 	candidatos = Queue()
-	candidatos.put(tabuleiro)
+	candidatos.put(grafo)
 	passados = {}
-	passados[tabuleiro] = [None, 0]
+	passados[grafo] = [None, 0]
 
 	no_final = None
-	estado_final = Tabuleiro()
+	estado_final = Grafo()
 
 	tick = 0
 	while not candidatos.empty():
 		candidato = candidatos.get()
 
-		if candidato == estado_final:
-			no_final = candidato
-			break
-
 		novos_candidatos = [ filho for filho in candidato.filhos()]
+                if len(novos_candidatos) == 0:
+                        no_final = candidato
+                        break
+
 		for novo_candidato in novos_candidatos:
 			if novo_candidato not in passados:
 				candidatos.put(novo_candidato)
@@ -106,27 +108,25 @@ def busca_largura( tabuleiro ):
 
 	return tick, passados, no_final
 
-def busca_profundidade( tabuleiro ):
+def busca_profundidade( grafo ):
 	candidatos = []
-	candidatos.append(tabuleiro)
+	candidatos.append(grafo)
 	passados = {}
-	passados[tabuleiro] = [None, 0]
+	passados[grafo] = [None, 0]
 
 	encontrou = False
 
 	no_final = None
-	estado_final = Tabuleiro()
+	estado_final = Grafo()
 
 	tick = 0
 	while not encontrou:
 		candidato = candidatos.pop()
-
-		if candidato == estado_final:
-			encontrou = True
-			no_final = candidato
-			break
-		
 		novos_candidatos = [ filho for filho in candidato.filhos()]
+                if len(novos_candidatos) == 0:
+                        encontrou = True
+                        no_final = candidato
+                        break
 		for novo_candidato in novos_candidatos:
 			if novo_candidato not in passados:
 				candidatos.append(novo_candidato)

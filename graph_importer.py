@@ -1,17 +1,17 @@
 from graph import *
 
-def to_int_list(string, reverse=False):
+def _to_int_list_(string, reverse=False):
     pre = string.strip().split()
     if reverse:
         pre.reverse()
     return map(lambda x: int(x), pre )
 
-def read_graph( file ):
+def _read_graph_( file ):
     for line in file:
         if line == "\r\n":
             break
         else:
-            yield list(enumerate(to_int_list(line)))
+            yield list(enumerate(_to_int_list_(line)))
 
 class Graph_importer(object):
     """
@@ -22,17 +22,22 @@ class Graph_importer(object):
 
     def graphs(self):
         f = open( self.file_name )
-        vertex, labels = to_int_list(f.readline())
+        n_vertex, n_labels = _to_int_list_(f.readline())
+        #print("%d %d") %(n_vertex,n_labels)
 
         dictionary = dict()
+        #10 grafos por arquivo
         for x in range(10):
             d = dict()
-            for vertex in list(enumerate(reversed(list(read_graph(f))),start=1)):
-                if vertex[0] > 50:
-                    import pdb
-                    pdb.set_trace()
+            edge_list = []
+            labels = []
+            vertexes = []
+            for vertex in list(enumerate(reversed(list(_read_graph_(f))),start=1)):
                 d[vertex[0]] = dict()
                 for v, label in vertex[1]:
                     d[vertex[0]][v] = label
-            print(len(d))
-            yield Graph(d, vertex, labels )
+
+                    if label != n_labels:
+                        edge_list.append( (vertex[0], label, v) )
+            #print(len(d))
+            yield Graph(d, range(n_vertex), range(n_labels), edge_list )
